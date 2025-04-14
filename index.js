@@ -57,25 +57,26 @@ import cors from 'cors'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+// Get __dirname equivalent in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
-
 // Enable CORS for all routes
 app.use(cors());
+app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
-  res.sendFile('./index.html');
+  res.sendFile('index.html',{root: __dirname});
 });
 
-app.get("/style.css", (req, res) => {
-  res.sendFile('./style.css');
-});
-app.get("/script.js", (req, res) => {
-  res.sendFile('./script.js');
-});
+// app.get("/style.css", (req, res) => {
+//   res.sendFile('./style.css',{root: __dirname});
+// });
+// app.get("/script.js", (req, res) => {
+//   res.sendFile('./script.js',{root: __dirname});
+// });
 
 app.listen(port, () => {
     console.log("Sergeant we have a server on the loose...someone catch it");
