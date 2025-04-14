@@ -65,10 +65,10 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 // Enable CORS for all routes
 app.use(cors());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html',{root: __dirname});
+  res.sendFile('index.html', { root: path.join(__dirname, 'public') });
 });
 
 // app.get("/style.css", (req, res) => {
