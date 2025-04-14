@@ -57,7 +57,6 @@ import cors from 'cors'
 
 const app = express();
 const port = process.env.PORT || 3000;
-const fs = require('fs');
 app.use(express.json());
 
 // Enable CORS for all routes
