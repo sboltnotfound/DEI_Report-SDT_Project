@@ -57,20 +57,23 @@ import cors from 'cors'
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+const fs = require('fs');
 app.use(express.json());
 
 // Enable CORS for all routes
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Express server working!')
-})
+  res.sendFile('./index.html',{root:__dirname});
+});
 
-app.get("/about", (req, res) => {
-    res.json({"message": "Welcome to the about page"})
-})
+app.get("/style.css", (req, res) => {
+  res.sendFile('./style.css',{root:__dirname});
+});
+app.get("/script.js", (req, res) => {
+  res.sendFile('./script.js',{root:__dirname});
+});
 
 app.listen(port, () => {
     console.log("Sergeant we have a server on the loose...someone catch it");
-})
+});
