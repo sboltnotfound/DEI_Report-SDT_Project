@@ -54,6 +54,10 @@
 // });
 import express from 'express'
 import cors from 'cors'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -63,14 +67,14 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.sendFile('./index.html',{root:__dirname});
+  res.sendFile('./index.html',{root: __dirname});
 });
 
 app.get("/style.css", (req, res) => {
-  res.sendFile('./style.css',{root:__dirname});
+  res.sendFile('./style.css',{root: __dirname});
 });
 app.get("/script.js", (req, res) => {
-  res.sendFile('./script.js',{root:__dirname});
+  res.sendFile('./script.js',{root: __dirname});
 });
 
 app.listen(port, () => {
