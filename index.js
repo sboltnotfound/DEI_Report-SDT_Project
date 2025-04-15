@@ -207,18 +207,6 @@ app.post('/add',async function(req, res,next){
     }
     con.end;
   });
-  //var {flag, id}= await user_query(userid,password);
-  //var id="";
-  
-  // if (flag===1) {
-  //   console.log('Login successful');
-  //   res.cookie('userid',id,{ maxAge: 3600000, httpOnly: true });
-  //   res.redirect('/start');
-  //   //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
-  // } else {
-  //   console.log('Login failed');
-  //   res.send('Invalid credentials. Try again.');
-  // }
 });
 
 
@@ -233,6 +221,20 @@ const con = new Client({
     ssl: process.env.DATABASE_URL ? true : false
 });
 
-con.connect().then(()=>{
-  console.log("connected!");
-});
+async function connectWithRetry(retries = 5, delay = 2000) {
+  while (retries > 0) {
+    try {
+      await con.connect();
+      console.log("Connected to PostgreSQL");
+      return;
+    } catch (err) {
+      console.error("Connection failed. Retrying in", delay / 1000, "sec...");
+      retries--;
+      await new Promise((res) => setTimeout(res, delay));
+    }
+  }
+  console.error("Could not connect after multiple attempts.");
+  process.exit(1);
+}
+
+connectWithRetry();
