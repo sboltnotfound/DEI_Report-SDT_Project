@@ -119,7 +119,6 @@ body {
   .recommendation {
     font-style: italic;
     text-align: left;
-    width: 21.875rem;
     padding: 1rem;
     background-color: #fff;
     border-radius: 11px;
@@ -130,6 +129,7 @@ body {
     font-size: 18px;
     height:150px;
     width: fit-content;
+    height: fit-content;
     max-width: 100%;
   }
   
