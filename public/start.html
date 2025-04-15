@@ -8,13 +8,22 @@
 <body>
     <nav>
         <div id="home">
+            <div class="heady">
+                <h1>DEI Report</h1>
+            </div>
+        </div>
+        <div id="home">
             <div class="topdiv">
                 <a class="topmenu" href="#reported"> Local News</a>
                 <a class="topmenu2" href="#actions"> Actions</a>
                 <a class="topmenu2" href="#report"> Report</a>
+                <form class="logout-form" action="/logout" method="get">
+                <label>Hey,  <%= username %>!</label>
+                <button type="submit">Logout</button>
+                </form>
             </div>
         </div>  
-        
+        <!--div class="nav-title">MyApp</div-->
     </nav>
     
 </body>

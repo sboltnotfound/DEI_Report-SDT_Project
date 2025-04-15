@@ -55,28 +55,63 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 
-// Get __dirname equivalent in ES Modules
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.json());
-// Enable CORS for all routes
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
+
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html', { root: path.join(__dirname, 'public') });
+  if (req.cookies.userid=='admin') {
+    res.redirect('/start');
+  }
+  else{
+    res.sendFile('login.html', { root: path.join(__dirname, 'public') });
+  }
+});
+app.get('/start', (req, res) => {
+  //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
+  if (req.cookies.userid=='admin') {
+    res.render('start', { username: req.cookies.userid });
+  }
+  else{
+    res.redirect('/');
+  }
+});
+app.get('/logout', (req, res) => {
+  res.clearCookie('userid');
+  res.redirect('/');
 });
 
-// app.get("/style.css", (req, res) => {
-//   res.sendFile('./style.css',{root: __dirname});
-// });
-// app.get("/script.js", (req, res) => {
-//   res.sendFile('./script.js',{root: __dirname});
-// });
+
+app.post('/login', (req, res) => {
+  const { userid, password } = req.body;
+  console.log('POST /login', { userid, password });
+
+  if (userid === 'admin' && password === '1234') {
+    console.log('Login successful');
+    res.cookie('userid','admin',{ maxAge: 3600000, httpOnly: true });
+    res.redirect('/start');
+    //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
+  } else {
+    console.log('Login failed');
+    res.send('Invalid credentials. Try again.');
+  }
+});
+
 
 app.listen(port, () => {
     console.log("Sergeant we have a server on the loose...someone catch it");

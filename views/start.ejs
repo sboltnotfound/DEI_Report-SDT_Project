@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Anti-DEI</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="script.js"></script>
+</head>
+<body>
+    <nav>
+        <div id="home">
+            <div class="heady">
+                <h1>DEI Report</h1>
+            </div>
+        </div>
+        <div id="home">
+            <div class="topdiv">
+                <a class="topmenu" href="#reported"> Local News</a>
+                <a class="topmenu2" href="#actions"> Actions</a>
+                <a class="topmenu2" href="#report"> Report</a>
+                <form class="logout-form" action="/logout" method="get">
+                <label class="hey">Hey,  <%= username %>!</label>
+                <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>  
+        <!--div class="nav-title">MyApp</div-->
+    </nav>
+
+    <section id="contact">
+      <div class="flex_center">
+        <fieldset>
+          <legend class="introduction">Report</legend>          
+          <input type="text" placeholder="Topic"> <br/>
+          <textarea id="new_recommendation" cols="500" rows="10" placeholder="Message"></textarea>
+          <div class="flex_center">
+            <button id="recommend_btn" onclick="addRecommendation()">Submit</button>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+    <!--div class="popup" id="popup" class="flex_center">
+      <img src="html_finalprojimages/checkmark--outline.svg"/>
+      <h3></h3>
+      <button onclick="showPopup(false)">Ok</button>
+    </div-->
+</body>
+</html>
