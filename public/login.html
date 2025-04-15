@@ -13,7 +13,7 @@
       height: 100vh;
     }
 
-    .login-container {
+    .form-container {
       background: white;
       padding: 30px 40px;
       border-radius: 10px;
@@ -21,13 +21,13 @@
       width: 310px;
     }
 
-    .login-container h2 {
+    .form-container h2 {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
+    .form-container input[type="text"],
+    .form-container input[type="password"] {
       width: 93%;
       padding: 10px;
       margin: 8px 0;
@@ -35,7 +35,7 @@
       border-radius: 5px;
     }
 
-    .login-container input[type="submit"] {
+    .form-container input[type="submit"] {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -47,25 +47,119 @@
       font-size: 20px;
     }
 
-    .login-container input[type="submit"]:hover {
+    .form-container input[type="submit"]:hover {
       background-color: #45a049;
     }
+    .auth-wrapper {
+    width: 300px;
+    margin: 50px auto;
+    font-family: sans-serif;
+  }
+
+  .toggle-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width:392px;
+    text-align: center;
+  }
+
+  .toggle-buttons button {
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: none;
+    background-color: #45a049;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    border: 1px solid #ccc;
+  }
+  .toggle-buttons :hover{
+    background-color: #4CAF50;
+  }
+  
   </style>
 </head>
 <body>
 
-<div class="login-container">
-  <h2>Login</h2>
-  <form action="/login" method="post">
-    <label for="userid">User ID</label>
-    <input type="text" id="userid" name="userid" required>
+  <div class="auth-wrapper">
+    <div class="toggle-buttons">
+      <button onclick="showForm('login')">Login</button>
+      <button onclick="showForm('register')">Register</button>
+    </div>
+  
+    <div id="login-form" class="form-container">
+      <h2>Login</h2>
+      <form action="/login" method="post">
+        <label for="login-userid">User ID</label>
+        <input type="text" id="login-userid" name="userid" required>
+  
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" required>
+  
+        <input type="submit" value="Login">
+      </form>
+    </div>
+  
+    <div id="register-form" class="form-container" style="display: none;">
+      <h2>Register</h2>
+      <form action="/register" method="post" onsubmit="return validateRegister()">
+        <label for="register-userid">User ID</label>
+        <input type="text" id="register-userid" name="userid" required>
+  
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" name="password" required>
+  
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm_password" required>
+  
+        <p id="password-error" style="color: red;"></p>
+  
+        <input type="submit" value="Register">
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    function showForm(formType) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+  
+      if (formType === 'login') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+    function validateRegister() {
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const errorDisplay = document.getElementById('password-error');
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
+    const isStrong = password.length >= 8 &&
+                     /[A-Z]/.test(password) &&
+                     /[a-z]/.test(password) &&
+                     /[0-9]/.test(password) &&
+                     /[^A-Za-z0-9]/.test(password); // special character
 
-    <input type="submit" value="Login">
-  </form>
-</div>
+    if (!isStrong) {
+      errorDisplay.innerText = "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.";
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      errorDisplay.innerText = "Passwords do not match.";
+      return false;
+    }
+
+    return true; // allow form submission
+  }
+  </script>
 
 </body>
 </html>

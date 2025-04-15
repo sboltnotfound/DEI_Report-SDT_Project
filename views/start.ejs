@@ -18,30 +18,45 @@
                 <a class="topmenu2" href="#actions"> Actions</a>
                 <a class="topmenu2" href="#report"> Report</a>
                 <form class="logout-form" action="/logout" method="get">
-                <label class="hey">Hey,  <%= username %>!</label>
+                <label class="hey">Hey,</label>
+                <label class="hey" id="usery"> <%= username %></label>
+                <label class="hey">!</label>
                 <button type="submit">Logout</button>
                 </form>
             </div>
         </div>  
         <!--div class="nav-title">MyApp</div-->
     </nav>
-
+    <section id="reported">
+      <h2 style="text-align: center;">Local News</h2>
+      <div style="clear:both;"></div>
+      <div class="all_recommendations" id="all_recommendations">
+        <div class="recommendation">
+          <p style="text-align: center;"><b>idk man</b></p>
+          <span>&#8220;</span>
+          This is a test message to see how the containers hold with larger texts yoooooooooooooooooooooooo.
+          <span>&#8221;</span>
+          <aside> shubh </aside>
+        </div>
+        <%- DATA %>
+      </div>
+    </section>
     <section id="report">
       <div class="flex_center">
         <fieldset>
           <legend class="introduction">Report</legend>          
-          <input type="text" placeholder="Topic"> <br/>
-          <textarea id="new_recommendation" cols="500" rows="10" placeholder="Message"></textarea>
+          <input id="bruh" type="text" placeholder="Topic" required> <br/>
+          <textarea id="new_recommendation" cols="500" rows="10" placeholder="Message" required></textarea>
           <div class="flex_center">
             <button id="recommend_btn" onclick="addRecommendation()">Submit</button>
           </div>
         </fieldset>
       </div>
     </section>
-    <!--div class="popup" id="popup" class="flex_center">
-      <img src="html_finalprojimages/checkmark--outline.svg"/>
-      <h3></h3>
+    <div class="popup" id="popup" class="flex_center">
+      <!--img src="html_finalprojimages/checkmark--outline.svg"/-->
+      <h3>Thank you for Reporting!</h3>
       <button onclick="showPopup(false)">Ok</button>
-    </div-->
+    </div>
 </body>
 </html>

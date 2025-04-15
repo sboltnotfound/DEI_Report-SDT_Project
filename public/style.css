@@ -14,7 +14,7 @@ body {
 }
 .heady{
     color: lightgray;
-    margin-left: 100px;
+    margin-left: 0px;
     align-content: center;
     align-self: center;
     text-align: center;
@@ -107,6 +107,79 @@ body {
     text-align: center;
     cursor: pointer;
   }
+  .all_recommendations {
+    display: flex;
+    align-items: center;
+    margin-left: 1in;
+    flex-direction: row;
+    flex-flow: wrap;
+    padding: 20px;
+  }
+  
+  .recommendation {
+    font-style: italic;
+    text-align: left;
+    width: 21.875rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 11px;
+    box-shadow: 0 3px 10px var(--primary-shadow);
+    padding: 20px;
+    margin: 10px;
+    border:1px solid gray;
+    font-size: 18px;
+    height:150px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  
+  .recommendation span {
+    color: #7600bc;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .popup {
+    width:400px;
+    background-color: #e8bcf0;
+    border-radius: 3mm;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    position: fixed;
+    /* padding: 30px; */
+    visibility: hidden;
+  }
+  
+  .popup img {
+    padding-top: 20px;
+  }
+  
+  .popup button {
+    background-color: #fff;
+    border: 1px solid #7600bc;
+    color: #7600bc;
+    display: block;
+    border-radius: 6px;
+    text-align: center;
+    margin: 50px;
+    padding: 10px;
+    width: 2in;
+    font-size: 20px;
+    margin-left: 25%;
+  }
+  
+  .popup button:hover {
+    background-color: #fff;
+    border: 2px solid #7600bc;
+    color: #7600bc;
+    display: block;
+    font-weight: bolder;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 25%;
+  }
+  
 .logout-form {
     margin: 0;
 }

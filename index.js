@@ -88,8 +88,14 @@ app.get('/start', async function(req, res){
   //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
   if (req.cookies.userid) {
     var {flag, id} = await user_query2(req.cookies.userid);
-    console.log("e"+id);
-    res.render('start', { username: id });
+    var {flag2, txt} = await user_query3(req.cookies.userid);
+    console.log("e"+id+txt);
+    var finalmsg="";
+    if (flag2){txt.forEach(entry => {
+      finalmsg += entry.txty;
+    });}
+    res.render('start', { username: id, DATA: finalmsg});
+
   }
   else{
     res.redirect('/');
@@ -138,6 +144,27 @@ async function user_query2(userid){
     });
   })
 }
+async function user_query3(userid){
+  return new Promise((resolve,reject)=>{
+    var flag2=0;
+    var txt="";
+    console.log('wtf'+userid);
+    con.query('select txty from nawsy',(errr,ress)=>{
+      if (errr){
+        console.log(errr);
+        reject(err);
+      }
+      else if(ress.rowCount!==0){
+        flag2=1;
+        txt = ress.rows;
+      }
+      con.end;
+      console.log(txt);
+      resolve({flag2, txt});
+      
+    });
+  })
+}
 app.post('/login',async function(req, res,next){
   const { userid, password } = req.body;
   console.log('POST /login', { userid, password });
@@ -146,13 +173,52 @@ app.post('/login',async function(req, res,next){
   
   if (flag===1) {
     console.log('Login successful');
-    res.cookie('userid',id,{ maxAge: 3600000, httpOnly: true });
+    res.cookie('userid',id,{ maxAge: 3600000 });
     res.redirect('/start');
     //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
   } else {
     console.log('Login failed');
     res.send('Invalid credentials. Try again.');
   }
+});
+app.post('/register',async function(req, res,next){
+  const { userid, password } = req.body;
+  console.log('POST /register', { userid, password });
+  con.query('insert into uspas(usnam, uspass) values(\''+userid+'\',\''+password+'\')',(errr,ress)=>{
+    if (errr){
+      console.log(errr);
+      reject(err);
+    }
+    con.end;
+    console.log("inserted new user!");
+    
+  });
+  res.redirect('/');
+});
+app.post('/add',async function(req, res,next){
+  const { topic, message,usid} = req.body;
+  console.log('POST /add', { topic, message,usid});
+  var {flag, id} = await user_query2(usid);
+  var msg = "\<div class=\"recommendation\"\>\<p style=\"text-align: center;\"\>\<b\>"+topic+"\</b\>\</p\>\<span\>&#8220;\</span\>" + message + "\<span\>&#8221;\</span\>" + "\<aside\>"+id+"\</aside\>\</div\>";
+  con.query('insert into nawsy(usid,txty) values ('+usid+',\''+msg+'\')',(errr,ress)=>{
+    if (errr){
+      console.log(errr);
+      reject(err);
+    }
+    con.end;
+  });
+  //var {flag, id}= await user_query(userid,password);
+  //var id="";
+  
+  // if (flag===1) {
+  //   console.log('Login successful');
+  //   res.cookie('userid',id,{ maxAge: 3600000, httpOnly: true });
+  //   res.redirect('/start');
+  //   //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
+  // } else {
+  //   console.log('Login failed');
+  //   res.send('Invalid credentials. Try again.');
+  // }
 });
 
 
