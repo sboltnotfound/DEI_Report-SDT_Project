@@ -85,7 +85,7 @@ body {
     border: thin solid white;
     width: 50%;
   }
-  #contact button {
+  #report button {
     background-color: #fff;
     border: 1px solid #7600bc;
     color: #7600bc;
@@ -98,7 +98,7 @@ body {
     font-size: 20px;
   }
   
-  #contact button:hover {
+  #report button:hover {
     background-color: #7600bc;
     border: 1px solid #7600bc;
     color: #fff;

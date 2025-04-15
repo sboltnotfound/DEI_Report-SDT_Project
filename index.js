@@ -57,7 +57,8 @@ import cors from 'cors'
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
-
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,17 +76,20 @@ app.use(cookieParser());
 
 
 app.get('/', (req, res) => {
-  if (req.cookies.userid=='admin') {
+  if (req.cookies.userid) {
     res.redirect('/start');
   }
   else{
     res.sendFile('login.html', { root: path.join(__dirname, 'public') });
   }
 });
-app.get('/start', (req, res) => {
+
+app.get('/start', async function(req, res){
   //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
-  if (req.cookies.userid=='admin') {
-    res.render('start', { username: req.cookies.userid });
+  if (req.cookies.userid) {
+    var {flag, id} = await user_query2(req.cookies.userid);
+    console.log("e"+id);
+    res.render('start', { username: id });
   }
   else{
     res.redirect('/');
@@ -96,14 +100,53 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-
-app.post('/login', (req, res) => {
+async function user_query(userid,password){
+  return new Promise((resolve,reject)=>{
+    var flag=0;
+    var id="";
+    con.query('select * from uspas where usnam=\''+userid+'\' and uspass=\''+password+'\'',(errr,ress)=>{
+      if (errr){
+        console.log(errr);
+        reject(err);
+      }
+      else if(ress.rowCount!==0){
+        flag=1;
+        id = ress.rows[0]["usid"];
+      }
+      con.end;
+      resolve({flag, id});
+    });
+  })
+}
+async function user_query2(userid){
+  return new Promise((resolve,reject)=>{
+    var flag=0;
+    var id="";
+    con.query('select * from uspas where usid=\''+userid+'\'',(errr,ress)=>{
+      if (errr){
+        console.log(errr);
+        reject(err);
+      }
+      else if(ress.rowCount!==0){
+        flag=1;
+        id = ress.rows[0]["usnam"];
+      }
+      con.end;
+      console.log(id);
+      resolve({flag, id});
+      
+    });
+  })
+}
+app.post('/login',async function(req, res,next){
   const { userid, password } = req.body;
   console.log('POST /login', { userid, password });
-
-  if (userid === 'admin' && password === '1234') {
+  var {flag, id}= await user_query(userid,password);
+  //var id="";
+  
+  if (flag===1) {
     console.log('Login successful');
-    res.cookie('userid','admin',{ maxAge: 3600000, httpOnly: true });
+    res.cookie('userid',id,{ maxAge: 3600000, httpOnly: true });
     res.redirect('/start');
     //res.sendFile('start.html', { root: path.join(__dirname, 'public') });
   } else {
@@ -115,4 +158,15 @@ app.post('/login', (req, res) => {
 
 app.listen(port, () => {
     console.log("Sergeant we have a server on the loose...someone catch it");
+});
+
+
+const {Client}=require('pg');
+const con = new Client({
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:bruh@localhost:5432/DEI_Report',
+    ssl: process.env.DATABASE_URL ? true : false
+});
+
+con.connect().then(()=>{
+  console.log("connected!");
 });
