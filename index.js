@@ -228,13 +228,12 @@ async function connectWithRetry(retries = 5, delay = 2000) {
       console.log("Connected to PostgreSQL");
       return;
     } catch (err) {
-      console.error("Connection failed. Retrying in", delay / 1000, "sec...");
+      console.log("Connection failed. Retrying in", delay / 1000, "sec...");
       retries--;
       await new Promise((res) => setTimeout(res, delay));
     }
   }
-  console.error("Could not connect after multiple attempts.");
-  process.exit(1);
+  
 }
 
 connectWithRetry();
